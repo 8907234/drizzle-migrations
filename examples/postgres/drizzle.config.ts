@@ -25,9 +25,7 @@ export default defineConfig({
       max: 1,
     })
 
-    return drizzle(migrationClient, {
-      casing: 'snake_case',
-    })
+    return drizzle(migrationClient)
   },
 
   seed: { dirPath: './src/seeders', defaultSeeder: 'default-seeder' },
