@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import * as tsx from 'tsx/cjs/api'
 import type { ConfigDialect, DBClient, DrizzleMigrationsConfig } from '..'
+import type { Casing } from 'drizzle-orm'
 
 export function resolveDrizzleConfig() {
   const configFileNames = [
@@ -82,6 +83,8 @@ export async function buildMigrationContext(drizzleConfigPath: string) {
     migrationTable: drizzleConfig.migrations?.table || 'drizzle_migrations',
     migrationSchema: drizzleConfig.migrations?.schema || 'public',
     opts: {},
+    casing: drizzleConfig.casing,
+    schemaFilter: drizzleConfig.schemaFilter,
     seed: drizzleConfig.seed
       ? {
           dirPath: path.join(drizzleFolder, drizzleConfig.seed.dirPath),
@@ -98,6 +101,8 @@ export type MigrationContext<
   migrationFolder: string
   schema: Record<string, any>
   dialect: TDialect
+  casing?: Casing
+  schemaFilter?: string[] | string
   client: DBClient<TDialect>
   migrationTable: string
   migrationSchema: string

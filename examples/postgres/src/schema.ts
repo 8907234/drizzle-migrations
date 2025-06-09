@@ -14,9 +14,10 @@ export const userRelations = relations(usersTable, (h) => ({
 export const postsTable = pgTable('posts', {
   id: serial('id').primaryKey(),
   title: varchar('title', { length: 255 }),
-  newColumn: varchar('new_column'),
+  newColumn: varchar(),
+  newColumn2: varchar(),
   content: varchar('content'),
-  userId: integer('user_id').references(() => usersTable.id),
+  userId: integer().references(() => usersTable.id),
 })
 
 export const booksTable = pgTable('books', {
@@ -32,9 +33,7 @@ export const postsBooksTable = pgTable(
     bookId: uuid('book_id').references(() => booksTable.id),
     postId: integer('post_id').references(() => postsTable.id),
   },
-  (t) => ({
-    compoundIndex: primaryKey({ columns: [t.bookId, t.postId] }),
-  })
+  (t) => [primaryKey({ columns: [t.bookId, t.postId] })]
 )
 
 export const postRelations = relations(postsTable, (h) => ({

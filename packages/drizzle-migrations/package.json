@@ -8,8 +8,8 @@
     "release": "pnpm build && pnpm publish --access public"
   },
   "peerDependencies": {
-    "drizzle-kit": "^0.30.1",
-    "drizzle-orm": "^0.31.2"
+    "drizzle-kit": "^0.31.1",
+    "drizzle-orm": "^0.44.2"
   },
   "bin": {
     "drizzle-migrations": "dist/cli-entry.cjs"

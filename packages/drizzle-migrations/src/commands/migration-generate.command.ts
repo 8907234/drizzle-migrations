@@ -1,7 +1,7 @@
-import { BaseCommand } from './_base.command'
 import type { DrizzleSnapshotJSON } from 'drizzle-kit/api'
 import fs from 'node:fs'
 import prompts from 'prompts'
+import { BaseCommand } from './_base.command'
 type GenerateMigrationOptions = {
   migrationName: string
   forceAcceptWarning?: boolean
@@ -30,8 +30,9 @@ export class MigrationGenerateCommand extends BaseCommand<GenerateMigrationOptio
     const filePath = `${dir}/${fileName}`
 
     let drizzleJsonBefore = this.getDefaultDrizzleSnapshot(this.ctx.dialect)
+    let prevId: string | undefined = undefined
 
-    // Get latest migration snapshot
+    // Get latest migration snapshot and extract prevId
     const latestSnapshot = fs
       .readdirSync(dir)
       .filter((file) => file.endsWith('.json'))
@@ -44,9 +45,21 @@ export class MigrationGenerateCommand extends BaseCommand<GenerateMigrationOptio
       ) as DrizzleSnapshotJSON
 
       drizzleJsonBefore = latestSnapshotJSON
+      prevId = latestSnapshotJSON.id
     }
 
-    const drizzleJsonAfter = generateDrizzleJson(this.ctx.schema)
+    // Pass casing and prevId to generateDrizzleJson
+    const drizzleJsonAfter = generateDrizzleJson(
+      this.ctx.schema,
+      prevId,
+      this.ctx.schemaFilter
+        ? typeof this.ctx.schemaFilter === 'string'
+          ? [this.ctx.schemaFilter]
+          : this.ctx.schemaFilter
+        : undefined,
+      this.ctx.casing
+    )
+
     const sqlStatementsUp = await generateMigration(drizzleJsonBefore, drizzleJsonAfter)
     const sqlStatementsDown = await generateMigration(drizzleJsonAfter, drizzleJsonBefore)
 

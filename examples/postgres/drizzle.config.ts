@@ -1,6 +1,7 @@
 import { defineConfig } from '@drepkovsky/drizzle-migrations'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
+
 export default defineConfig({
   schema: './src/schema.ts',
   dialect: 'postgresql',
@@ -18,12 +19,15 @@ export default defineConfig({
     schema: 'public',
     table: 'drizzle_migrations',
   },
+  casing: 'snake_case',
   getMigrator: async () => {
     const migrationClient = postgres('postgres://postgres:postgres@localhost/postgres-db', {
       max: 1,
     })
 
-    return drizzle(migrationClient)
+    return drizzle(migrationClient, {
+      casing: 'snake_case',
+    })
   },
 
   seed: { dirPath: './src/seeders', defaultSeeder: 'default-seeder' },
