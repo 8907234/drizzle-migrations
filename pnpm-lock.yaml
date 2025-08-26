@@ -20,7 +20,7 @@ importers:
 
   examples/postgres:
     dependencies:
-      '@drepkovsky/drizzle-migrations':
+      '@aegon_targaryen/drizzle-migrations':
         specifier: workspace:*
         version: link:../../packages/drizzle-migrations
       drizzle-kit:

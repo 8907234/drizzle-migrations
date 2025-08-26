@@ -1,6 +1,6 @@
 {
-  "name": "@drepkovsky/drizzle-migrations",
-  "version": "0.7.0",
+  "name": "@aegon_targaryen/drizzle-migrations",
+  "version": "0.8.0",
   "description": "Tiny tool for managing migrations in Drizzle",
   "scripts": {
     "build": "rimraf dist && tsup",
@@ -40,7 +40,7 @@
     "up migration",
     "down migration",
     "rollback",
-    "drepkovsky"
+    "aegon_targaryen"
   ],
   "author": "Dominik Repkovský",
   "license": "ISC",

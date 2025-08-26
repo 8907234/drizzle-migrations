@@ -1,18 +1,16 @@
 # Drizzle migrations
 
-Simple tool that ads `up` and `down` migration capability for drizzle projects.
-
+Simple tool that ads `up` and `down` and `down-one` migration capability for drizzle projects.
 
 Automatic migration generation for drizzle was adapted from the **PayloadCMS** repository.
 
- **Warning**! This tool is work in progress and was only tested on `pg` databases, but should be working on `sqlite` and `mysql` too.
- This is also something that drizzle will probably have built-in inside `drizzle-kit` in the future.
-
+**Warning**! This tool is work in progress and was only tested on `pg` databases, but should be working on `sqlite` and `mysql` too.
+This is also something that drizzle will probably have built-in inside `drizzle-kit` in the future.
 
 ## Installation
 
 ```bash
-npm install @drepkovsky/drizzle-migrations # or yarn,pnpm,bun
+npm install @aegon_targaryen/drizzle-migrations # or yarn,pnpm,bun
 ```
 
 ## Configuration
@@ -20,11 +18,11 @@ npm install @drepkovsky/drizzle-migrations # or yarn,pnpm,bun
 To make this work you have to make small changes inside your `drizzle.config.ts` file
 
 ```ts
-import { defineConfig } from '@drepkovsky/drizzle-migrations'
+import { defineConfig } from '@aegon_targaryen/drizzle-migrations'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
-// notice how we are not using `defineConfig` from drizzle but from `@drepkovsky/drizzle-migrations`
+// notice how we are not using `defineConfig` from drizzle but from `@aegon_targaryen/drizzle-migrations`
 export default defineConfig({
   schema: './src/schema.ts',
   dialect: 'postgresql',
@@ -35,7 +33,7 @@ export default defineConfig({
   migrations: {
     schema: 'public',
     table: 'drizzle_migrations',
-  }, 
+  },
 
   // define your own client using adapter of your choice
   getMigrator: async () => {
@@ -44,7 +42,7 @@ export default defineConfig({
     })
 
     return drizzle(migrationClient)
-  }, 
+  },
 
   // only needed if you want to use seed commands
   seed: { dirPath: './src/seeders', defaultSeeder: 'db-seeder' }
@@ -54,58 +52,72 @@ export default defineConfig({
 ## Usage
 
 ### Generate migration
+
 ```bash
 npm run drizzle-migrations generate --name <migration-name>
 ```
 
 ### Run migrations
+
 ```bash
 npm run drizzle-migrations up
 ```
 
 ### Rollback migrations
+
 ```bash
 npm run drizzle-migrations down
 ```
 
+### Rollback one migration
+
+```bash
+npm run drizzle-migrations down-one
+```
+
 ### Rollback up to specific batch
+
 ```bash
 npm run drizzle-migrations down --bach <batch-number>
 ```
 
 ### Get status of migrations
+
 ```bash
 npm run drizzle-migrations status
 ```
 
 ### Rollback all migrations
+
 ```bash
 npm run drizzle-migrations fresh
 ```
 
 ### Rollback all migrations and run them again
+
 ```bash
 npm run drizzle-migrations refresh
 ```
 
 ### Create seeder
+
 ```bash
 npm run drizzle-migrations seed:create --name <seeder-name>
 ```
 
 ### Run seeders
+
 ```bash
 npm run drizzle-migrations seed:run --name <seeder-name> // default seeder is db-seeder
 ```
 
-
 ### Example of generated migration
 
 ```ts
-import { sql } from 'drizzle-orm'
-import type { MigrationArgs } from '@drepkovsky/drizzle-migrations'
+import { sql } from "drizzle-orm";
+import type { MigrationArgs } from "@aegon_targaryen/drizzle-migrations";
 
-export async function up({ db }: MigrationArgs<'postgresql'>): Promise<void> {
+export async function up({ db }: MigrationArgs<"postgresql">): Promise<void> {
   await db.execute(sql`
         CREATE TABLE IF NOT EXISTS "posts" (
                 "id" serial PRIMARY KEY NOT NULL,
@@ -126,13 +138,13 @@ export async function up({ db }: MigrationArgs<'postgresql'>): Promise<void> {
         WHEN duplicate_object THEN null;
         END $$;
 
-        `)
+        `);
 }
 
-export async function down({ db }: MigrationArgs<'postgresql'>): Promise<void> {
+export async function down({ db }: MigrationArgs<"postgresql">): Promise<void> {
   await db.execute(sql`
         DROP TABLE "posts";
         DROP TABLE "users";
-`)
+`);
 }
 ```

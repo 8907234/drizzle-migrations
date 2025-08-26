@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@drepkovsky/drizzle-migrations": "workspace:*",
+    "@aegon_targaryen/drizzle-migrations": "workspace:*",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.44.2",
     "postgres": "^3.4.7"
